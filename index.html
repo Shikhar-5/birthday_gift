@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday Ananya 🎂</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── Design Tokens ── */
+    :root {
+      --midnight:   #060310;
+      --deep:       #0e0720;
+      --card-bg:    rgba(255,255,255,0.035);
+      --card-hover: rgba(255,255,255,0.07);
+      --border:     rgba(212,165,116,0.18);
+      --border-h:   rgba(212,165,116,0.55);
+      --gold:       #d4a574;
+      --gold-light: #f0c98a;
+      --rose:       #e8728c;
+      --lilac:      #b57bee;
+      --text-1:     #f5efe8;
+      --text-2:     #c9b89e;
+      --text-3:     #8a7a6a;
+      --glow-gold:  rgba(212,165,116,0.25);
+      --glow-rose:  rgba(232,114,140,0.25);
+      --tr:         cubic-bezier(0.34,1.56,0.64,1);
+      --tr-smooth:  cubic-bezier(0.4,0,0.2,1);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--midnight);
+      color: var(--text-1);
+      min-height: 100vh;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── Restore normal cursor on touch/mobile devices ── */
+    @media (hover: none), (pointer: coarse) {
+      body { cursor: auto; }
+      #cursor-dot, #cursor-ring { display: none !important; }
+      button, a, [role="button"] { cursor: pointer !important; }
+    }
+
+    /* ── Custom Cursor ── */
+    #cursor-dot {
+      position: fixed; width:8px; height:8px;
+      background: var(--gold); border-radius:50%;
+      pointer-events:none; z-index:9999;
+      transform:translate(-50%,-50%);
+      transition: transform 0.08s, background 0.2s;
+      mix-blend-mode: screen;
+    }
+    #cursor-ring {
+      position:fixed; width:36px; height:36px;
+      border:1.5px solid rgba(212,165,116,0.6);
+      border-radius:50%; pointer-events:none; z-index:9998;
+      transform:translate(-50%,-50%);
+      transition: transform 0.18s var(--tr-smooth), width 0.3s, height 0.3s, border-color 0.3s;
+    }
+    body:has(.wish-card:hover) #cursor-ring,
+    body:has(.btn:hover) #cursor-ring { width:56px; height:56px; border-color:var(--rose); }
+    body:has(.wish-card:hover) #cursor-dot { background:var(--rose); transform:translate(-50%,-50%) scale(1.5); }
+
+    /* ── Canvases ── */
+    #stars-canvas, #particles-canvas {
+      position:fixed; inset:0; width:100%; height:100%;
+      pointer-events:none;
+    }
+    #stars-canvas   { z-index:1; }
+    #particles-canvas { z-index:2; }
+
+    /* ── Main Layout ── */
+    .page {
+      position:relative; z-index:10;
+      max-width:1160px; margin:0 auto;
+      padding:80px 24px 100px;
+      display:flex; flex-direction:column; align-items:center;
+    }
+
+    /* ── Date Badge ── */
+    .date-badge {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 18px;
+      border:1px solid var(--border);
+      border-radius:100px;
+      font-size:0.75rem; font-weight:600; letter-spacing:0.14em;
+      color:var(--gold); text-transform:uppercase;
+      background:rgba(212,165,116,0.07);
+      margin-bottom:28px;
+      animation: fadeDown 0.7s var(--tr) both;
+    }
+    .date-badge span { font-size:1em; }
+
+    /* ── Header ── */
+    .header {
+      text-align:center;
+      margin-bottom:88px;
+    }
+
+    .header h1 {
+      font-family:'Cormorant Garamond', serif;
+      font-size:clamp(3rem,9vw,6.5rem);
+      font-weight:700; line-height:1;
+      letter-spacing:-0.02em;
+      animation:fadeDown 0.8s var(--tr) 0.2s both;
+    }
+
+    .h1-line1 {
+      display:block;
+      color:var(--text-2);
+      font-style:italic;
+      font-size:0.55em;
+      letter-spacing:0.05em;
+      margin-bottom:4px;
+    }
+
+    .h1-name {
+      display:block;
+      background:linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 40%, var(--rose) 80%, var(--lilac) 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+      filter:drop-shadow(0 0 40px rgba(212,165,116,0.35));
+    }
+
+    /* Typewriter cursor */
+    .tw-cursor {
+      display:inline-block;
+      width:3px; height:0.8em;
+      background:var(--gold);
+      vertical-align:middle;
+      margin-left:3px;
+      animation:blink 1s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1}50%{opacity:0} }
+
+    /* Decorative divider */
+    .divider {
+      display:flex; align-items:center; justify-content:center; gap:16px;
+      width:100%; max-width:280px;
+      margin:28px auto;
+      animation:fadeUp 0.8s var(--tr) 0.5s both;
+    }
+    .divider-line { flex:1; height:1px; background:linear-gradient(to right,transparent,var(--border)); }
+    .divider-line.r { background:linear-gradient(to left,transparent,var(--border)); }
+    .divider-gem {
+      width:8px; height:8px;
+      border:1.5px solid var(--gold);
+      transform:rotate(45deg);
+      background:rgba(212,165,116,0.15);
+    }
+
+    /* ── Cycling Phrase ── */
+    .cycling-wrap {
+      text-align:center;
+      margin-bottom:88px;
+      animation:fadeUp 0.8s var(--tr) 0.55s both;
+    }
+    .cycling-prefix {
+      font-family:'Cormorant Garamond',serif;
+      font-style:italic;
+      font-size:clamp(1.1rem,2.8vw,1.55rem);
+      color:var(--text-3);
+      letter-spacing:0.04em;
+      display:block;
+      margin-bottom:14px;
+    }
+    .cycling-word-box {
+      display:inline-block;
+      position:relative;
+      height:clamp(2.8rem,7vw,4.6rem);
+      overflow:hidden;
+      vertical-align:bottom;
+    }
+    .cycling-word {
+      display:block;
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(2.8rem,7vw,4.6rem);
+      font-weight:700;
+      line-height:1;
+      background:linear-gradient(135deg,var(--gold-light) 0%,var(--gold) 35%,var(--rose) 70%,var(--lilac) 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+      filter:drop-shadow(0 0 30px rgba(212,165,116,0.3));
+      opacity:0;
+      transform:translateY(32px);
+      transition:opacity 0.55s cubic-bezier(0.4,0,0.2,1), transform 0.55s cubic-bezier(0.4,0,0.2,1);
+      position:absolute;
+      left:50%; translate:-50% 0;
+      white-space:nowrap;
+    }
+    .cycling-word.active {
+      opacity:1; transform:translateY(0);
+    }
+    .cycling-word.exit {
+      opacity:0; transform:translateY(-32px);
+    }
+    .cycling-suffix {
+      font-family:'Cormorant Garamond',serif;
+      font-style:italic;
+      font-size:clamp(1.1rem,2.8vw,1.55rem);
+      color:var(--text-3);
+      letter-spacing:0.04em;
+      display:block;
+      margin-top:14px;
+    }
+    .cycling-dots {
+      display:flex; gap:8px; justify-content:center; margin-top:20px;
+    }
+    .c-dot {
+      width:6px; height:6px; border-radius:50%;
+      background:var(--text-3);
+      transition:background 0.4s, transform 0.4s;
+    }
+    .c-dot.active { background:var(--gold); transform:scale(1.5); }
+
+    /* ── Cards Grid ── */
+    .cards-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:24px; width:100%; margin-bottom:80px;
+    }
+
+    .wish-card {
+      position:relative;
+      padding:40px 32px 36px;
+      border-radius:20px;
+      border:1px solid var(--border);
+      background:var(--card-bg);
+      backdrop-filter:blur(16px);
+      cursor:none;
+      display:flex; flex-direction:column; align-items:center; text-align:center;
+      overflow:hidden;
+      transition:border-color 0.35s, box-shadow 0.35s, background 0.35s;
+      outline:none;
+      transform-style:preserve-3d;
+      will-change:transform;
+      animation:fadeUp 0.9s var(--tr) calc(0.6s + var(--i,0) * 0.12s) both;
+    }
+
+    /* Restore pointer cursor on touch devices for cards */
+    @media (hover: none), (pointer: coarse) {
+      .wish-card { cursor: pointer; }
+    }
+
+    .wish-card:nth-child(1){--i:0}
+    .wish-card:nth-child(2){--i:1}
+    .wish-card:nth-child(3){--i:2}
+
+    .wish-card::before {
+      content:''; position:absolute; inset:0;
+      background:radial-gradient(ellipse at 50% 0%, rgba(212,165,116,0.12), transparent 70%);
+      opacity:0; transition:opacity 0.4s;
+      pointer-events:none;
+    }
+    .wish-card::after {
+      content:''; position:absolute;
+      top:-1px; left:10%; right:10%; height:1px;
+      background:linear-gradient(to right,transparent,var(--gold-light),transparent);
+      opacity:0; transition:opacity 0.4s;
+    }
+    .wish-card:hover {
+      border-color:var(--border-h);
+      background:var(--card-hover);
+      box-shadow:0 0 40px rgba(212,165,116,0.12), 0 24px 48px rgba(0,0,0,0.5);
+    }
+    .wish-card:hover::before,
+    .wish-card:hover::after { opacity:1; }
+
+    .card-glow {
+      position:absolute; inset:0;
+      pointer-events:none;
+      opacity:0; transition:opacity 0.5s;
+      background:radial-gradient(ellipse at var(--mx,50%) var(--my,50%), rgba(232,114,140,0.08), transparent 60%);
+    }
+    .wish-card:hover .card-glow { opacity:1; }
+
+    .card-number {
+      position:absolute; top:18px; right:20px;
+      font-family:'Cormorant Garamond',serif;
+      font-size:3rem; font-weight:600;
+      color:rgba(255,255,255,0.04);
+      line-height:1;
+      user-select:none;
+    }
+
+    .card-icon-wrap {
+      position:relative; margin-bottom:20px;
+    }
+    .card-icon {
+      width:90px; height:90px;
+      border-radius:50%;
+      object-fit:cover;
+      object-position:center top;
+      display:block;
+      margin:0 auto;
+      border:2px solid var(--border);
+      box-shadow:0 4px 20px rgba(212,165,116,0.25);
+      transition:transform 0.4s var(--tr), box-shadow 0.4s, border-color 0.4s;
+    }
+    .card-icon-halo {
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      width:106px; height:106px;
+      border-radius:50%;
+      background:radial-gradient(circle,rgba(212,165,116,0.22),transparent 70%);
+      opacity:0; transition:opacity 0.4s;
+    }
+    .wish-card:hover .card-icon {
+      transform:scale(1.1) translateY(-4px);
+      box-shadow:0 8px 30px rgba(212,165,116,0.4);
+      border-color:var(--border-h);
+    }
+    .wish-card:hover .card-icon-halo { opacity:1; }
+
+    .card-tag {
+      font-size:0.68rem; font-weight:600; letter-spacing:0.18em;
+      text-transform:uppercase; color:var(--gold);
+      margin-bottom:10px; opacity:0.8;
+    }
+    .card-title {
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.6rem; font-weight:700;
+      color:var(--text-1); margin-bottom:10px; line-height:1.2;
+    }
+    .card-desc {
+      font-size:0.9rem; color:var(--text-2); line-height:1.65; font-weight:300;
+      margin-bottom:24px;
+    }
+    .card-btn {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 22px;
+      border:1px solid var(--border-h);
+      border-radius:100px;
+      font-family:'Outfit',sans-serif;
+      font-size:0.82rem; font-weight:600; letter-spacing:0.06em;
+      color:var(--gold); background:rgba(212,165,116,0.08);
+      cursor:none; transition:all 0.3s;
+    }
+    @media (hover: none), (pointer: coarse) {
+      .card-btn { cursor: pointer; }
+    }
+    .wish-card:hover .card-btn {
+      background:rgba(212,165,116,0.18);
+      box-shadow:0 0 20px rgba(212,165,116,0.2);
+    }
+    .card-btn-arrow { transition:transform 0.3s; }
+    .wish-card:hover .card-btn-arrow { transform:translateX(4px); }
+
+    /* ── Footer Quote ── */
+    .footer-quote {
+      text-align:center;
+      padding:40px 20px;
+      animation:fadeUp 0.8s var(--tr) 1s both;
+    }
+    .footer-quote blockquote {
+      font-family:'Cormorant Garamond',serif;
+      font-style:italic;
+      font-size:clamp(1.1rem,2.5vw,1.5rem);
+      color:var(--text-2); line-height:1.7;
+      max-width:600px; margin:0 auto 12px;
+    }
+    .footer-quote cite { font-size:0.8rem; color:var(--text-3); letter-spacing:0.1em; }
+
+    /* ── Music Toggle ── */
+    .music-btn {
+      position:fixed; bottom:28px; right:28px;
+      width:52px; height:52px;
+      border-radius:50%; border:1px solid var(--border-h);
+      background:rgba(14,7,32,0.8);
+      backdrop-filter:blur(12px);
+      color:var(--gold); font-size:1.3rem;
+      display:flex; align-items:center; justify-content:center;
+      cursor:none; z-index:100;
+      transition:all 0.3s var(--tr);
+      box-shadow:0 0 20px rgba(212,165,116,0.1);
+    }
+    @media (hover: none), (pointer: coarse) {
+      .music-btn { cursor: pointer; }
+    }
+    .music-btn:hover { box-shadow:0 0 30px rgba(212,165,116,0.3); transform:scale(1.1); }
+    .music-btn .eq-bars {
+      display:flex; gap:3px; align-items:flex-end; height:18px;
+    }
+    .eq-bar {
+      width:3px; background:var(--gold); border-radius:2px;
+      animation:eqBounce 0.6s ease-in-out infinite alternate;
+    }
+    .eq-bar:nth-child(2) { animation-delay:0.15s; }
+    .eq-bar:nth-child(3) { animation-delay:0.3s; }
+    .music-btn.paused .eq-bar { animation:none; height:4px !important; }
+    @keyframes eqBounce {
+      from { height:4px; }
+      to   { height:18px; }
+    }
+    .eq-bar:nth-child(1) { --h:14px; }
+    .eq-bar:nth-child(2) { --h:18px; }
+    .eq-bar:nth-child(3) { --h:10px; }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      position:fixed; inset:0;
+      background:rgba(4,1,14,0.6);
+      backdrop-filter:blur(8px);
+      display:flex; align-items:center; justify-content:center;
+      opacity:0; pointer-events:none;
+      transition:opacity 0.4s;
+      z-index:200;
+      padding:20px;
+    }
+    .modal-overlay.open { opacity:1; pointer-events:auto; }
+
+    .modal-box {
+      position:relative;
+      width:100%; max-width:520px;
+      background:linear-gradient(145deg,#100820,#0d0618);
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:0 0 36px;
+      box-shadow:0 0 80px rgba(212,165,116,0.1), 0 40px 80px rgba(0,0,0,0.6);
+      transform:translateY(28px) scale(0.97);
+      transition:transform 0.45s var(--tr), opacity 0.45s;
+      opacity:0;
+      max-height:90vh; overflow-y:auto;
+      scrollbar-width:thin; scrollbar-color:var(--border) transparent;
+    }
+    .modal-overlay.open .modal-box { transform:translateY(0) scale(1); opacity:1; }
+
+    .modal-img-wrap {
+      position:relative; width:100%; height:230px;
+      border-radius:24px 24px 0 0; overflow:hidden; margin-bottom:32px;
+    }
+    .modal-img-wrap img {
+      width:100%; height:100%; object-fit:contain;
+      transition:transform 6s ease;
+    }
+    .modal-overlay.open .modal-img-wrap img { transform:scale(1.06); }
+    .modal-img-overlay {
+      position:absolute; inset:0;
+      background:linear-gradient(to bottom,transparent 50%,rgba(16,8,32,0.9));
+    }
+    .modal-img-badge {
+      position:absolute; bottom:16px; left:20px;
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.6rem; font-weight:700; color:#fff;
+      text-shadow:0 2px 20px rgba(0,0,0,0.5);
+    }
+
+    .modal-body { padding:0 32px; }
+    .modal-tag {
+      font-size:0.7rem; font-weight:600; letter-spacing:0.18em;
+      text-transform:uppercase; color:var(--gold); margin-bottom:10px;
+    }
+    .modal-title {
+      font-family:'Cormorant Garamond',serif;
+      font-size:2rem; font-weight:700;
+      color:var(--text-1); margin-bottom:16px; line-height:1.2;
+    }
+    .modal-msg {
+      font-size:1rem; line-height:1.85; color:var(--text-2); margin-bottom:28px;
+    }
+    .modal-actions { display:flex; gap:12px; }
+    .btn-celebrate {
+      flex:1; padding:13px 20px;
+      background:linear-gradient(135deg,var(--gold),var(--rose));
+      border:none; border-radius:12px;
+      font-family:'Outfit',sans-serif; font-size:0.9rem; font-weight:600;
+      color:#fff; cursor:none;
+      transition:all 0.3s; letter-spacing:0.03em;
+      box-shadow:0 4px 20px rgba(212,165,116,0.25);
+    }
+    @media (hover: none), (pointer: coarse) {
+      .btn-celebrate, .btn-close-modal, .modal-x { cursor: pointer; }
+    }
+    .btn-celebrate:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(212,165,116,0.4); }
+    .btn-close-modal {
+      padding:13px 20px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:transparent; color:var(--text-2);
+      font-family:'Outfit',sans-serif; font-size:0.9rem; font-weight:500;
+      cursor:none; transition:all 0.3s;
+    }
+    .btn-close-modal:hover { border-color:var(--border-h); color:var(--text-1); }
+
+    .modal-x {
+      position:absolute; top:14px; right:14px;
+      width:36px; height:36px; border-radius:50%;
+      background:rgba(255,255,255,0.07); border:none;
+      color:var(--text-2); font-size:1.1rem;
+      display:flex; align-items:center; justify-content:center;
+      cursor:none; transition:all 0.2s; z-index:2;
+    }
+    .modal-x:hover { background:rgba(255,255,255,0.14); color:var(--text-1); }
+
+    /* ── Celebration Burst ── */
+    .burst-container {
+      position:fixed; inset:0; pointer-events:none; z-index:300;
+    }
+    .burst-ring {
+      position:absolute; border-radius:50%;
+      border:2px solid var(--gold);
+      animation:ringExpand 1s ease-out forwards;
+      top:50%; left:50%;
+      transform:translate(-50%,-50%) scale(0);
+    }
+    @keyframes ringExpand {
+      to { transform:translate(-50%,-50%) scale(8); opacity:0; }
+    }
+
+    /* ── Burst Backdrop (NEW) ── */
+    .burst-backdrop {
+      position:fixed; inset:0;
+      background: rgba(4, 1, 18, 0.55);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index:300;
+      pointer-events:none;
+      animation: backdropFade 2.2s ease forwards;
+    }
+    @keyframes backdropFade {
+      0%   { opacity:0; }
+      15%  { opacity:1; }
+      70%  { opacity:1; }
+      100% { opacity:0; }
+    }
+
+    .burst-text {
+      position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(2rem,6vw,4rem); font-weight:700;
+      background:linear-gradient(135deg,var(--gold-light),var(--rose));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+      text-align:center; line-height:1.2;
+      animation:burstText 2s var(--tr) forwards;
+      pointer-events:none; z-index:302;
+      text-shadow:none;
+      filter:drop-shadow(0 0 30px rgba(212,165,116,0.5));
+    }
+    @keyframes burstText {
+      0%  { opacity:0; transform:translate(-50%,-50%) scale(0.6); }
+      30% { opacity:1; transform:translate(-50%,-50%) scale(1.05); }
+      70% { opacity:1; transform:translate(-50%,-50%) scale(1); }
+      100%{ opacity:0; transform:translate(-50%,-60%) scale(0.95); }
+    }
+    .confetti-piece {
+      position:fixed; pointer-events:none; z-index:302;
+      border-radius:2px;
+      animation:confettiFall linear forwards;
+    }
+    @keyframes confettiFall {
+      0%   { transform:translateY(-10px) rotate(0deg); opacity:1; }
+      100% { transform:translateY(110vh) rotate(720deg); opacity:0; }
+    }
+
+    /* ── Keyframes ── */
+    @keyframes fadeDown {
+      from { opacity:0; transform:translateY(-18px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(22px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ── Responsive ── */
+    @media(max-width:768px){
+      .page { padding:60px 16px 80px; }
+      .cards-grid { grid-template-columns:1fr; }
+      .music-btn { bottom:20px; right:20px; }
+    }
+    @media(max-width:480px){
+      .header { margin-bottom:56px; }
+      .modal-img-wrap { height:180px; }
+      .modal-body { padding:0 20px; }
+      .modal-box { padding-bottom:24px; }
+    }
+
+    @media(prefers-reduced-motion:reduce){
+      *, *::before, *::after {
+        animation-duration:0.01ms !important;
+        transition-duration:0.01ms !important;
+      }
+    }
+
+    audio { display:none; }
+  </style>
+</head>
+<body>
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<canvas id="stars-canvas" aria-hidden="true"></canvas>
+<canvas id="particles-canvas" aria-hidden="true"></canvas>
+
+<audio id="bgMusic" src="bgmusic.mp3" loop preload="none"></audio>
+<audio id="openSound" src="fahhh.mp3" preload="auto"></audio>
+
+<main class="page" role="main">
+
+  <div class="date-badge">
+    <span>🎂</span> Birthday Celebration <span>✨</span>
+  </div>
+
+  <header class="header">
+    <h1>
+      <span class="h1-line1">Happy Birthday,</span>
+      <span class="h1-name" id="typed-name"></span><span class="tw-cursor" id="tw-cursor"></span>
+    </h1>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-gem"></div>
+      <div class="divider-gem" style="width:5px;height:5px;opacity:0.5;transform:rotate(45deg) scale(0.7);"></div>
+      <div class="divider-gem"></div>
+      <div class="divider-line r"></div>
+    </div>
+  </header>
+
+  <div class="cycling-wrap" aria-label="Birthday phrase">
+    <span class="cycling-prefix">another year of being</span>
+    <div class="cycling-word-box" id="wordBox">
+      </div>
+    <span class="cycling-suffix">— and we wouldn't have it any other way.</span>
+    <div class="cycling-dots" id="cyclingDots"></div>
+  </div>
+
+  <section class="cards-grid" aria-label="Birthday wishes">
+
+    <button class="wish-card" data-wish="0" aria-label="Open surprise message">
+      <div class="card-glow"></div>
+      <span class="card-number">01</span>
+      <div class="card-icon-wrap">
+        <div class="card-icon-halo"></div>
+        <img class="card-icon" src="modalimg.jpg" alt="Surprise" />
+      </div>
+      <p class="card-tag">Just for you</p>
+      <h2 class="card-title">A Small Surprise</h2>
+      <p class="card-desc">A very special message, sealed with love and a little chaos — just the way you like it.</p>
+      <span class="card-btn">Open it <span class="card-btn-arrow">→</span></span>
+    </button>
+
+    <button class="wish-card" data-wish="1" aria-label="Open cheers card">
+      <div class="card-glow"></div>
+      <span class="card-number">02</span>
+      <div class="card-icon-wrap">
+        <div class="card-icon-halo"></div>
+        <img class="card-icon" src="modalimg2.jpg" alt="Cheers" />
+      </div>
+      <p class="card-tag">Celebration time</p>
+      <h2 class="card-title">Cheers to You!</h2>
+      <p class="card-desc">To every adventure, every laugh, every wild moment — here's raising a glass to you.</p>
+      <span class="card-btn">Open it <span class="card-btn-arrow">→</span></span>
+    </button>
+
+    <button class="wish-card" data-wish="2" aria-label="Open sweet wishes card">
+      <div class="card-glow"></div>
+      <span class="card-number">03</span>
+      <div class="card-icon-wrap">
+        <div class="card-icon-halo"></div>
+        <img class="card-icon" src="modalimg3.jpg" alt="Sweet Wishes" />
+      </div>
+      <p class="card-tag">From the heart</p>
+      <h2 class="card-title">Sweet Wishes</h2>
+      <p class="card-desc">May every single day ahead bloom as beautifully as the person you already are.</p>
+      <span class="card-btn">Open it <span class="card-btn-arrow">→</span></span>
+    </button>
+
+  </section>
+
+  <footer class="footer-quote">
+    <blockquote>
+    </blockquote>
+    <cite></cite>
+  </footer>
+
+</main>
+
+<button class="music-btn paused" id="musicBtn" aria-label="Toggle music" title="Toggle music">
+  <div class="eq-bars">
+    <div class="eq-bar" style="height:4px"></div>
+    <div class="eq-bar" style="height:4px"></div>
+    <div class="eq-bar" style="height:4px"></div>
+  </div>
+</button>
+
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal-box" id="modalBox">
+    <button class="modal-x" id="modalClose" aria-label="Close">✕</button>
+    <div class="modal-img-wrap">
+      <img id="modalImg" src="" alt="Wish image" loading="lazy" />
+      <div class="modal-img-overlay"></div>
+      <div class="modal-img-badge" id="modalImgTitle"></div>
+    </div>
+    <div class="modal-body">
+      <p class="modal-tag" id="modalTag"></p>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <p class="modal-msg" id="modalMsg"></p>
+      <div class="modal-actions">
+        <button class="btn-celebrate" id="celebrateBtn">Celebrate! 🎊</button>
+        <button class="btn-close-modal" id="closeBtn">Maybe Later</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+/* ─── Config ─── */
+const WISHES = [
+  {
+    tag:'Just for you',
+    title:'🎁 A Small Surprise',
+    imgTitle:'Surprise!',
+    msg:'Another year older, Still undefeated. Still unpredictable. Hopefully the same energy continues and Backchodi level Never changes. Here\'s to you being exactly as chaotically wonderful as always. 🥂😎',
+    image:'modalimg.jpg'
+  },
+  {
+    tag:'Celebration time',
+    title:'🥂 Cheers to You!',
+    imgTitle:'Cheers!',
+    msg:'Another year older, another year wiser, and another year more amazing. Every single chapter of your life has been bold, bright, and completely your own. Keep shining exactly the way you always do.',
+    image:'modalimg2.jpg'
+  },
+  {
+    tag:'From the heart',
+    title:'🌸 Sweet Wishes',
+    imgTitle:'✨',
+    msg:'May your days be as sweet as cake, your dreams as bright as fireworks, and your future overflowing with every beautiful thing you deserve. Happy Birthday — the world\'s a better place with you in it. 🌸',
+    image:'modalimg3.jpg'
+  }
+];
+
+/* ─── Detect touch/mobile ─── */
+const isTouchDevice = () =>
+  window.matchMedia('(hover: none), (pointer: coarse)').matches ||
+  ('ontouchstart' in window) ||
+  navigator.maxTouchPoints > 0;
+
+/* ─── Cursor (desktop only) ─── */
+const dot  = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+
+if (!isTouchDevice()) {
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX; my=e.clientY;
+    dot.style.left = mx+'px'; dot.style.top = my+'px';
+  });
+  (function animRing(){
+    rx += (mx-rx)*0.12; ry += (my-ry)*0.12;
+    ring.style.left=rx+'px'; ring.style.top=ry+'px';
+    requestAnimationFrame(animRing);
+  })();
+
+  /* Apply cursor:none to interactive elements on desktop only */
+  document.querySelectorAll('button,a,[role="button"]').forEach(el=>{
+    el.style.cursor='none';
+  });
+} else {
+  /* On touch devices, hide cursor elements and restore normal cursor */
+  dot.style.display  = 'none';
+  ring.style.display = 'none';
+  document.body.style.cursor = 'auto';
+}
+
+/* ─── Typewriter ─── */
+const NAME='Ananya';
+const typedEl=document.getElementById('typed-name');
+const curEl=document.getElementById('tw-cursor');
+let ti=0;
+function typeChar(){
+  if(ti<=NAME.length){
+    typedEl.textContent=NAME.slice(0,ti++);
+    setTimeout(typeChar, ti===1?600:90);
+  } else {
+    setTimeout(()=>{ curEl.style.display='none'; },1600);
+  }
+}
+setTimeout(typeChar,900);
+
+/* ─── Stars Canvas ─── */
+(function(){
+  const c=document.getElementById('stars-canvas');
+  const ctx=c.getContext('2d');
+  let W,H,stars=[],shooters=[];
+
+  function resize(){ W=c.width=window.innerWidth; H=c.height=window.innerHeight; }
+  resize(); window.addEventListener('resize',resize);
+
+  function mkStar(){
+    return { x:Math.random()*W, y:Math.random()*H,
+             r:Math.random()*1.2+0.2,
+             a:Math.random(), da:Math.random()*0.004+0.001 };
+  }
+  for(let i=0;i<200;i++) stars.push(mkStar());
+
+  function mkShooter(){
+    const x=Math.random()*W*0.7;
+    const y=Math.random()*H*0.4;
+    return { x,y,vx:6+Math.random()*4, vy:2+Math.random()*3,
+             len:80+Math.random()*60, life:1, dead:false };
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    stars.forEach(s=>{
+      s.a+=s.da; if(s.a>1||s.a<0) s.da*=-1;
+      ctx.beginPath();
+      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(245,239,232,${s.a*0.7})`;
+      ctx.fill();
+    });
+    shooters = shooters.filter(s=>{
+      s.x+=s.vx; s.y+=s.vy; s.life-=0.025;
+      if(s.life<=0) return false;
+      const grd=ctx.createLinearGradient(s.x-s.vx*10,s.y-s.vy*10,s.x,s.y);
+      grd.addColorStop(0,'rgba(240,201,138,0)');
+      grd.addColorStop(1,`rgba(240,201,138,${s.life*0.9})`);
+      ctx.beginPath();
+      ctx.moveTo(s.x-s.vx*10,s.y-s.vy*10);
+      ctx.lineTo(s.x,s.y);
+      ctx.strokeStyle=grd; ctx.lineWidth=2; ctx.stroke();
+      return true;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+  setInterval(()=>{ if(Math.random()<0.6) shooters.push(mkShooter()); }, 2800);
+})();
+
+/* ─── Particle Canvas ─── */
+const pcSystem=(function(){
+  const c=document.getElementById('particles-canvas');
+  const ctx=c.getContext('2d');
+  let W,H,pts=[];
+  function resize(){ W=c.width=window.innerWidth; H=c.height=window.innerHeight; }
+  resize(); window.addEventListener('resize',resize);
+
+  function mkPt(x,y){
+    const a=Math.random()*Math.PI*2, sp=Math.random()*9+2;
+    return { x,y, vx:Math.cos(a)*sp, vy:Math.sin(a)*sp,
+             life:1, r:Math.random()*3+1.2,
+             hue:Math.random()*60+10 };
+  }
+  function explode(x,y,n=55){
+    for(let i=0;i<n;i++) pts.push(mkPt(x,y));
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    pts=pts.filter(p=>{
+      p.vy+=0.07; p.vx*=0.98;
+      p.x+=p.vx; p.y+=p.vy;
+      p.life-=0.012;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`hsla(${p.hue},80%,65%,${p.life})`;
+      ctx.fill();
+      return p.life>0;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+  setInterval(()=>{ explode(Math.random()*W, Math.random()*H*0.75, 30); }, 1800);
+  return { explode };
+})();
+
+/* ─── Cycling Word ─── */
+(function(){
+  const words = ['legendary','iconic','chaotic','unstoppable','irreplaceable'];
+  const box = document.getElementById('wordBox');
+  const dotsWrap = document.getElementById('cyclingDots');
+  let cur = 0;
+
+  const els = words.map((w,i)=>{
+    const el = document.createElement('span');
+    el.className = 'cycling-word';
+    el.textContent = w;
+    box.appendChild(el);
+    return el;
+  });
+
+  const dots = words.map((_,i)=>{
+    const d = document.createElement('div');
+    d.className = 'c-dot' + (i===0?' active':'');
+    dotsWrap.appendChild(d);
+    return d;
+  });
+
+  function sizeBox(){
+    let maxW = 0;
+    els.forEach(el=>{
+      el.style.position='static'; el.style.opacity='1'; el.style.transform='none';
+      maxW = Math.max(maxW, el.offsetWidth);
+      el.style.position=''; el.style.opacity=''; el.style.transform='';
+    });
+    box.style.width = (maxW+8)+'px';
+  }
+
+  els[0].classList.add('active');
+  document.fonts.ready.then(sizeBox);
+  setTimeout(sizeBox, 400);
+
+  function next(){
+    const prev = cur;
+    cur = (cur+1) % words.length;
+    els[prev].classList.remove('active');
+    els[prev].classList.add('exit');
+    dots[prev].classList.remove('active');
+    setTimeout(()=>{ els[prev].classList.remove('exit'); }, 560);
+    els[cur].classList.add('active');
+    dots[cur].classList.add('active');
+  }
+
+  setInterval(next, 2200);
+})();
+
+/* ─── 3D Card Tilt (desktop only) ─── */
+if (!isTouchDevice()) {
+  document.querySelectorAll('.wish-card').forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect();
+      const cx=(e.clientX-r.left)/r.width-0.5;
+      const cy=(e.clientY-r.top)/r.height-0.5;
+      card.style.transform=`perspective(800px) rotateY(${cx*12}deg) rotateX(${-cy*10}deg) translateY(-8px)`;
+      const glow=card.querySelector('.card-glow');
+      const px=((e.clientX-r.left)/r.width)*100;
+      const py=((e.clientY-r.top)/r.height)*100;
+      glow.style.setProperty('--mx',px+'%');
+      glow.style.setProperty('--my',py+'%');
+    });
+    card.addEventListener('mouseleave',()=>{
+      card.style.transform='perspective(800px) rotateY(0deg) rotateX(0deg) translateY(0)';
+    });
+  });
+}
+
+const openSound = document.getElementById('openSound');
+document.querySelectorAll('.wish-card').forEach(card=>{
+  card.addEventListener('click',()=>{
+    // Play the new sound effect
+    openSound.currentTime = 0;
+    openSound.play().catch(e => console.log("Sound could not be played:", e));
+
+    const wi=parseInt(card.dataset.wish);
+    openModal(wi);
+  });
+});
+
+/* ─── Audio ─── */
+const audio=document.getElementById('bgMusic');
+const musicBtn=document.getElementById('musicBtn');
+let playing=false, started=false;
+function tryPlay(){
+  audio.volume=0.28;
+  audio.play().then(()=>{ playing=true; musicBtn.classList.remove('paused'); })
+             .catch(()=>{});
+}
+document.addEventListener('click',()=>{ if(!started){ started=true; tryPlay(); } },{ once:true });
+musicBtn.addEventListener('click',e=>{
+  e.stopPropagation();
+  if(playing){ audio.pause(); playing=false; musicBtn.classList.add('paused'); }
+  else       { tryPlay(); }
+});
+
+/* ─── Modal ─── */
+const overlay  = document.getElementById('modalOverlay');
+const modalImg = document.getElementById('modalImg');
+const modalImgTitle = document.getElementById('modalImgTitle');
+const modalTag = document.getElementById('modalTag');
+const modalTitle=document.getElementById('modalTitle');
+const modalMsg = document.getElementById('modalMsg');
+
+function openModal(i){
+  const w=WISHES[i];
+  modalImg.src=w.image;
+  modalImgTitle.textContent=w.imgTitle;
+  modalTag.textContent=w.tag;
+  modalTitle.textContent=w.title;
+  modalMsg.textContent=w.msg;
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>{
+    pcSystem.explode(window.innerWidth/2+60, window.innerHeight/3);
+    pcSystem.explode(window.innerWidth/2-60, window.innerHeight/3);
+  },200);
+}
+function closeModal(){
+  overlay.classList.remove('open');
+  overlay.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+}
+document.getElementById('modalClose').addEventListener('click',closeModal);
+document.getElementById('closeBtn').addEventListener('click',closeModal);
+overlay.addEventListener('click',e=>{ if(e.target===overlay) closeModal(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+
+/* ─── Celebrate ─── */
+document.getElementById('celebrateBtn').addEventListener('click',()=>{
+  closeModal();
+  setTimeout(triggerCelebration,300);
+});
+
+function triggerCelebration(){
+  const colors=['#d4a574','#f0c98a','#e8728c','#b57bee','#fff','#7be8d4'];
+
+  /* ── Blur backdrop (NEW) ── */
+  const backdrop = document.createElement('div');
+  backdrop.className = 'burst-backdrop';
+  document.body.appendChild(backdrop);
+  setTimeout(()=>backdrop.remove(), 2300);
+
+  for(let i=0;i<120;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.cssText=`
+      left:${Math.random()*100}vw;
+      top:-10px;
+      width:${6+Math.random()*8}px;
+      height:${6+Math.random()*8}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      transform:rotate(${Math.random()*360}deg);
+      animation:confettiFall ${1.8+Math.random()*2.2}s ${Math.random()*0.8}s linear forwards;
+    `;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),4000);
+  }
+  const burst=document.createElement('div');
+  burst.className='burst-container';
+  for(let i=0;i<3;i++){
+    const ring=document.createElement('div');
+    ring.className='burst-ring';
+    ring.style.cssText=`width:${80+i*40}px;height:${80+i*40}px;animation-delay:${i*150}ms;border-color:${['var(--gold)','var(--rose)','var(--lilac)'][i]};`;
+    burst.appendChild(ring);
+  }
+  document.body.appendChild(burst);
+  setTimeout(()=>burst.remove(),1500);
+
+  const txt=document.createElement('div');
+  txt.className='burst-text';
+  txt.innerHTML='Happy<br>Birthday!<br><span style="font-size:0.55em;font-style:italic;">Ananya 🎉</span>';
+  document.body.appendChild(txt);
+  setTimeout(()=>txt.remove(),2200);
+
+  const cx=window.innerWidth/2, cy=window.innerHeight/2;
+  for(let i=0;i<10;i++){
+    const a=(i/10)*Math.PI*2;
+    setTimeout(()=>pcSystem.explode(cx+Math.cos(a)*180,cy+Math.sin(a)*180,40),i*80);
+  }
+  setTimeout(()=>{ pcSystem.explode(cx,cy,80); },400);
+}
+</script>
+</body>
+</html>
