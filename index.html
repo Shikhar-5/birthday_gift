@@ -225,134 +225,440 @@
     .cards-grid {
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-      gap:24px; width:100%; margin-bottom:80px;
+      gap:28px; width:100%; margin-bottom:80px;
     }
 
     .wish-card {
       position:relative;
-      padding:40px 32px 36px;
-      border-radius:20px;
+      padding:0;
+      border-radius:24px;
       border:1px solid var(--border);
       background:var(--card-bg);
       backdrop-filter:blur(16px);
       cursor:none;
       display:flex; flex-direction:column; align-items:center; text-align:center;
       overflow:hidden;
-      transition:border-color 0.35s, box-shadow 0.35s, background 0.35s;
       outline:none;
-      transform-style:preserve-3d;
       will-change:transform;
       animation:fadeUp 0.9s var(--tr) calc(0.6s + var(--i,0) * 0.12s) both;
+      transition:border-color 0.4s, box-shadow 0.4s, transform 0.4s var(--tr);
+      height:380px;
     }
-
-    /* Restore pointer cursor on touch devices for cards */
-    @media (hover: none), (pointer: coarse) {
-      .wish-card { cursor: pointer; }
-    }
-
+    @media (hover: none), (pointer: coarse) { .wish-card { cursor:pointer; height:auto; min-height:380px; } }
     .wish-card:nth-child(1){--i:0}
     .wish-card:nth-child(2){--i:1}
     .wish-card:nth-child(3){--i:2}
-
-    .wish-card::before {
-      content:''; position:absolute; inset:0;
-      background:radial-gradient(ellipse at 50% 0%, rgba(212,165,116,0.12), transparent 70%);
-      opacity:0; transition:opacity 0.4s;
-      pointer-events:none;
-    }
-    .wish-card::after {
-      content:''; position:absolute;
-      top:-1px; left:10%; right:10%; height:1px;
-      background:linear-gradient(to right,transparent,var(--gold-light),transparent);
-      opacity:0; transition:opacity 0.4s;
-    }
     .wish-card:hover {
       border-color:var(--border-h);
-      background:var(--card-hover);
-      box-shadow:0 0 40px rgba(212,165,116,0.12), 0 24px 48px rgba(0,0,0,0.5);
-    }
-    .wish-card:hover::before,
-    .wish-card:hover::after { opacity:1; }
-
-    .card-glow {
-      position:absolute; inset:0;
-      pointer-events:none;
-      opacity:0; transition:opacity 0.5s;
-      background:radial-gradient(ellipse at var(--mx,50%) var(--my,50%), rgba(232,114,140,0.08), transparent 60%);
-    }
-    .wish-card:hover .card-glow { opacity:1; }
-
-    .card-number {
-      position:absolute; top:18px; right:20px;
-      font-family:'Cormorant Garamond',serif;
-      font-size:3rem; font-weight:600;
-      color:rgba(255,255,255,0.04);
-      line-height:1;
-      user-select:none;
+      box-shadow:0 0 50px rgba(212,165,116,0.15), 0 24px 48px rgba(0,0,0,0.5);
+      transform:translateY(-8px);
     }
 
-    .card-icon-wrap {
-      position:relative; margin-bottom:20px;
+    /* ── Shared art canvas area ── */
+    .card-art {
+      width:100%; height:200px;
+      position:relative; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      overflow:hidden;
     }
-    .card-icon {
-      width:90px; height:90px;
-      border-radius:50%;
-      object-fit:cover;
-      object-position:center top;
-      display:block;
-      margin:0 auto;
-      border:2px solid var(--border);
-      box-shadow:0 4px 20px rgba(212,165,116,0.25);
-      transition:transform 0.4s var(--tr), box-shadow 0.4s, border-color 0.4s;
-    }
-    .card-icon-halo {
-      position:absolute; top:50%; left:50%;
-      transform:translate(-50%,-50%);
-      width:106px; height:106px;
-      border-radius:50%;
-      background:radial-gradient(circle,rgba(212,165,116,0.22),transparent 70%);
-      opacity:0; transition:opacity 0.4s;
-    }
-    .wish-card:hover .card-icon {
-      transform:scale(1.1) translateY(-4px);
-      box-shadow:0 8px 30px rgba(212,165,116,0.4);
-      border-color:var(--border-h);
-    }
-    .wish-card:hover .card-icon-halo { opacity:1; }
 
+    /* ── Card bottom info ── */
+    .card-info {
+      padding:20px 28px 28px;
+      display:flex; flex-direction:column; align-items:center; gap:6px;
+      flex:1;
+    }
     .card-tag {
       font-size:0.68rem; font-weight:600; letter-spacing:0.18em;
-      text-transform:uppercase; color:var(--gold);
-      margin-bottom:10px; opacity:0.8;
+      text-transform:uppercase; color:var(--gold); opacity:0.8;
     }
     .card-title {
       font-family:'Cormorant Garamond',serif;
-      font-size:1.6rem; font-weight:700;
-      color:var(--text-1); margin-bottom:10px; line-height:1.2;
+      font-size:1.55rem; font-weight:700;
+      color:var(--text-1); line-height:1.2;
     }
     .card-desc {
-      font-size:0.9rem; color:var(--text-2); line-height:1.65; font-weight:300;
-      margin-bottom:24px;
+      font-size:0.85rem; color:var(--text-2); line-height:1.6; font-weight:300;
+      margin-bottom:4px;
     }
     .card-btn {
       display:inline-flex; align-items:center; gap:8px;
-      padding:10px 22px;
-      border:1px solid var(--border-h);
-      border-radius:100px;
+      padding:9px 22px; margin-top:4px;
+      border:1px solid var(--border-h); border-radius:100px;
       font-family:'Outfit',sans-serif;
-      font-size:0.82rem; font-weight:600; letter-spacing:0.06em;
+      font-size:0.8rem; font-weight:600; letter-spacing:0.06em;
       color:var(--gold); background:rgba(212,165,116,0.08);
       cursor:none; transition:all 0.3s;
     }
-    @media (hover: none), (pointer: coarse) {
-      .card-btn { cursor: pointer; }
-    }
+    @media (hover:none),(pointer:coarse){ .card-btn{ cursor:pointer; } }
     .wish-card:hover .card-btn {
       background:rgba(212,165,116,0.18);
       box-shadow:0 0 20px rgba(212,165,116,0.2);
     }
-    .card-btn-arrow { transition:transform 0.3s; }
-    .wish-card:hover .card-btn-arrow { transform:translateX(4px); }
+
+    /* ════════════════════════════════
+       CARD 1 — GIFT BOX
+    ════════════════════════════════ */
+    .gift-scene {
+      position:relative; width:140px; height:160px;
+    }
+    /* box body */
+    .gift-box-body {
+      position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+      width:100px; height:80px;
+      background:linear-gradient(135deg,#d4a574,#b07840);
+      border-radius:6px 6px 8px 8px;
+      box-shadow:0 8px 30px rgba(212,165,116,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+    /* vertical ribbon on body */
+    .gift-box-body::before {
+      content:''; position:absolute;
+      left:50%; top:0; transform:translateX(-50%);
+      width:16px; height:100%;
+      background:linear-gradient(135deg,var(--rose),#c04060);
+      border-radius:2px;
+    }
+    /* box lid */
+    .gift-lid {
+      position:absolute; bottom:76px; left:50%; transform:translateX(-50%);
+      width:108px; height:24px;
+      background:linear-gradient(135deg,#e0b580,#c08040);
+      border-radius:6px 6px 0 0;
+      box-shadow:0 -4px 20px rgba(212,165,116,0.2);
+      transition:transform 0.5s var(--tr), opacity 0.4s;
+      transform-origin:50% 100%;
+    }
+    /* ribbon on lid */
+    .gift-lid::before {
+      content:''; position:absolute;
+      left:50%; top:0; transform:translateX(-50%);
+      width:16px; height:100%;
+      background:linear-gradient(135deg,var(--rose),#c04060);
+      border-radius:2px 2px 0 0;
+    }
+    /* bow */
+    .gift-bow {
+      position:absolute; bottom:100px; left:50%; transform:translateX(-50%);
+      width:60px; height:32px;
+      transition:transform 0.5s var(--tr), opacity 0.4s;
+    }
+    .bow-left, .bow-right {
+      position:absolute; bottom:0;
+      width:24px; height:24px;
+      border-radius:50% 50% 0 50%;
+      background:linear-gradient(135deg,var(--rose),#e8a0b0);
+      box-shadow:0 2px 8px rgba(232,114,140,0.4);
+    }
+    .bow-left  { left:2px;  transform:rotate(-45deg); }
+    .bow-right { right:2px; transform:rotate(45deg) scaleX(-1); }
+    .bow-knot {
+      position:absolute; bottom:6px; left:50%; transform:translateX(-50%);
+      width:12px; height:12px; border-radius:50%;
+      background:var(--rose);
+    }
+    /* sparkles that appear on hover */
+    .gift-sparkle {
+      position:absolute;
+      width:6px; height:6px;
+      border-radius:50%;
+      background:var(--gold-light);
+      opacity:0;
+      transition:none;
+      pointer-events:none;
+    }
+    .wish-card:nth-child(1):hover .gift-lid {
+      transform:translateX(-50%) rotateX(-70deg) translateY(-10px);
+      opacity:0.3;
+    }
+    .wish-card:nth-child(1):hover .gift-bow {
+      transform:translateX(-50%) translateY(-30px) scale(0.5);
+      opacity:0;
+    }
+    .wish-card:nth-child(1):hover .gift-sparkle { animation:sparkleburst 0.8s var(--tr) forwards; }
+    .gift-sparkle:nth-child(1){ top:30px; left:30px; animation-delay:0s !important; }
+    .gift-sparkle:nth-child(2){ top:10px; left:60px; animation-delay:0.1s !important; }
+    .gift-sparkle:nth-child(3){ top:20px; left:90px; animation-delay:0.05s !important; }
+    .gift-sparkle:nth-child(4){ top:50px; left:20px; animation-delay:0.15s !important; }
+    .gift-sparkle:nth-child(5){ top:40px; left:100px;animation-delay:0.08s !important; }
+    @keyframes sparkleburst {
+      0%   { opacity:0; transform:scale(0) translate(0,0); }
+      50%  { opacity:1; transform:scale(1.5) translate(var(--sx,10px),var(--sy,-20px)); }
+      100% { opacity:0; transform:scale(0.5) translate(var(--sx,10px),var(--sy,-40px)); }
+    }
+    .gift-sparkle:nth-child(1){ --sx:-20px; --sy:-30px; background:var(--gold-light); width:8px; height:8px; }
+    .gift-sparkle:nth-child(2){ --sx:10px;  --sy:-40px; background:var(--rose); width:6px; height:6px; }
+    .gift-sparkle:nth-child(3){ --sx:25px;  --sy:-20px; background:var(--lilac); width:10px; height:10px; }
+    .gift-sparkle:nth-child(4){ --sx:-30px; --sy:-10px; background:var(--gold); width:5px; height:5px; }
+    .gift-sparkle:nth-child(5){ --sx:15px;  --sy:-35px; background:#fff; width:7px; height:7px; }
+    /* box idle shake */
+    @keyframes giftShake {
+      0%,100%{ transform:translateX(-50%) rotate(0deg); }
+      20%    { transform:translateX(-50%) rotate(-3deg); }
+      40%    { transform:translateX(-50%) rotate(3deg); }
+      60%    { transform:translateX(-50%) rotate(-2deg); }
+      80%    { transform:translateX(-50%) rotate(2deg); }
+    }
+    .gift-box-body { animation:giftShake 3s ease-in-out infinite; }
+
+    /* ════════════════════════════════
+       CARD 2 — BLOWING CANDLE
+    ════════════════════════════════ */
+    .candle-scene {
+      position:relative; width:100%; height:100%;
+      display:flex; align-items:flex-end; justify-content:center;
+      padding-bottom:18px;
+    }
+
+    /* plate / base */
+    .candle-plate {
+      position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+      width:90px; height:10px;
+      background:linear-gradient(to bottom, #2a1f3a, #1a1228);
+      border-radius:50%;
+      box-shadow:0 4px 20px rgba(0,0,0,0.5);
+    }
+    .candle-plate::after {
+      content:'';
+      position:absolute; top:-3px; left:5px; right:5px; height:6px;
+      background:linear-gradient(to bottom, #3a2a50, #2a1f3a);
+      border-radius:50%;
+    }
+
+    /* wax drip trails on the candle body */
+    .candle-body {
+      position:relative;
+      width:28px; height:90px;
+      background:linear-gradient(160deg, #f5c8dc 0%, #e8a0c0 40%, #d4709a 100%);
+      border-radius:4px 4px 3px 3px;
+      box-shadow:
+        inset -5px 0 10px rgba(0,0,0,0.15),
+        inset 5px 0 8px rgba(255,255,255,0.2),
+        0 4px 20px rgba(212,100,150,0.3);
+      margin-bottom:16px;
+      z-index:2;
+    }
+    /* highlight stripe */
+    .candle-body::before {
+      content:'';
+      position:absolute; top:6px; left:6px;
+      width:5px; height:70%;
+      background:rgba(255,255,255,0.3);
+      border-radius:3px;
+    }
+    /* wax drips */
+    .candle-body::after {
+      content:'';
+      position:absolute; top:-4px; left:50%; transform:translateX(-50%);
+      width:34px; height:12px;
+      background:linear-gradient(to bottom, #fce8f0, #f5c8dc);
+      border-radius:50% 50% 0 0 / 80% 80% 0 0;
+      box-shadow:inset 0 -3px 6px rgba(0,0,0,0.1);
+    }
+
+    /* wax drip blobs */
+    .wax-drip {
+      position:absolute;
+      background:linear-gradient(to bottom,#fce8f0, #f5c8dc);
+      border-radius:0 0 50% 50%;
+    }
+    .wax-drip:nth-child(1){ width:6px; height:14px; top:8px;  left:2px;  border-radius:0 0 50% 50%; }
+    .wax-drip:nth-child(2){ width:5px; height:10px; top:12px; right:4px; border-radius:0 0 50% 50%; }
+    .wax-drip:nth-child(3){ width:4px; height:8px;  top:5px;  left:10px; border-radius:0 0 50% 50%; }
+
+    /* wick */
+    .candle-wick {
+      position:absolute; top:-10px; left:50%; transform:translateX(-50%);
+      width:2px; height:10px;
+      background:linear-gradient(to top, #4a3020, #2a1810);
+      border-radius:1px;
+      z-index:3;
+    }
+
+    /* ── FLAME ── */
+    .flame-outer {
+      position:absolute;
+      bottom:100%; left:50%; transform:translateX(-50%);
+      width:20px; height:32px;
+      z-index:4;
+      transform-origin:50% 100%;
+      transition:opacity 0.3s;
+    }
+
+    /* main flame layers */
+    .flame-main {
+      position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+      width:18px; height:30px;
+      background:linear-gradient(to top, #ff3300 0%, #ff8800 40%, #ffcc00 75%, #fff7a0 100%);
+      border-radius:50% 50% 20% 20% / 60% 60% 40% 40%;
+      box-shadow:
+        0 0 8px 4px rgba(255,120,0,0.6),
+        0 0 20px 8px rgba(255,60,0,0.3),
+        0 0 40px 12px rgba(255,160,0,0.15);
+      animation: flameFlickerC 0.45s ease-in-out infinite alternate;
+      transform-origin:50% 100%;
+    }
+    .flame-inner {
+      position:absolute; bottom:3px; left:50%; transform:translateX(-50%);
+      width:10px; height:18px;
+      background:linear-gradient(to top, #ffaa00, #ffe680, #ffffff);
+      border-radius:50% 50% 20% 20% / 60% 60% 40% 40%;
+      opacity:0.9;
+      animation: flameFlickerC 0.35s ease-in-out infinite alternate-reverse;
+      transform-origin:50% 100%;
+    }
+    .flame-core {
+      position:absolute; bottom:3px; left:50%; transform:translateX(-50%);
+      width:5px; height:9px;
+      background:#fff;
+      border-radius:50%;
+      opacity:0.7;
+    }
+
+    @keyframes flameFlickerC {
+      0%   { transform:translateX(-50%) scaleX(1)    scaleY(1)    skewX(0deg);  }
+      25%  { transform:translateX(-50%) scaleX(0.88) scaleY(1.06) skewX(-3deg); }
+      50%  { transform:translateX(-50%) scaleX(1.08) scaleY(0.95) skewX(2deg);  }
+      75%  { transform:translateX(-50%) scaleX(0.92) scaleY(1.08) skewX(-2deg); }
+      100% { transform:translateX(-50%) scaleX(1.05) scaleY(0.97) skewX(3deg);  }
+    }
+
+    /* ── SMOKE (shows when blown out) ── */
+    .smoke-wrap {
+      position:absolute; bottom:105%; left:50%; transform:translateX(-50%);
+      width:20px;
+      pointer-events:none;
+      opacity:0;
+      transition:opacity 0.2s;
+    }
+    .smoke-puff {
+      position:absolute; left:50%;
+      width:8px; height:8px; border-radius:50%;
+      background:rgba(200,200,220,0.6);
+      filter:blur(3px);
+      animation:smokeDrift 1.8s ease-out infinite;
+      opacity:0;
+    }
+    .smoke-puff:nth-child(1){ animation-delay:0s;    --sx:-6px;  }
+    .smoke-puff:nth-child(2){ animation-delay:0.35s; --sx:7px;   width:6px; height:6px; }
+    .smoke-puff:nth-child(3){ animation-delay:0.7s;  --sx:-4px;  width:10px; height:10px; }
+    .smoke-puff:nth-child(4){ animation-delay:1.05s; --sx:5px;   width:7px; height:7px; }
+
+    @keyframes smokeDrift {
+      0%   { opacity:0;   transform:translateX(-50%) translateY(0)    scale(0.5); }
+      15%  { opacity:0.7; }
+      80%  { opacity:0.3; transform:translateX(calc(-50% + var(--sx))) translateY(-55px) scale(2); }
+      100% { opacity:0;   transform:translateX(calc(-50% + var(--sx))) translateY(-70px) scale(2.5); }
+    }
+
+    /* blown-out state — JS adds class .blown to .candle-scene */
+    .candle-scene.blown .flame-outer { opacity:0; pointer-events:none; }
+    .candle-scene.blown .smoke-wrap  { opacity:1; }
+    .candle-scene.blown .candle-glow { opacity:0; }
+
+    /* relight state — JS removes .blown */
+    .candle-scene:not(.blown) .smoke-wrap { opacity:0; }
+
+    /* ambient glow on card background */
+    .candle-glow {
+      position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
+      width:140px; height:60px;
+      background:radial-gradient(ellipse, rgba(255,140,0,0.18), transparent 70%);
+      border-radius:50%;
+      animation:candleGlowPulse 2s ease-in-out infinite;
+      transition:opacity 0.5s;
+      pointer-events:none;
+    }
+    @keyframes candleGlowPulse {
+      0%,100%{ transform:translateX(-50%) scale(1);   opacity:0.7; }
+      50%    { transform:translateX(-50%) scale(1.15); opacity:1;   }
+    }
+
+    /* hint text */
+    .candle-hint {
+      position:absolute; top:12px; left:50%; transform:translateX(-50%);
+      font-size:0.68rem; font-weight:600; letter-spacing:0.12em;
+      text-transform:uppercase; color:var(--text-3);
+      white-space:nowrap;
+      transition:color 0.4s;
+    }
+    .candle-scene.blown .candle-hint { color:var(--gold); }
+
+    /* ════════════════════════════════
+       CARD 3 — BLOOMING FLOWER
+    ════════════════════════════════ */
+    .flower-scene {
+      position:relative; width:160px; height:180px;
+      display:flex; align-items:center; justify-content:center;
+    }
+    /* stem */
+    .flower-stem {
+      position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+      width:4px; height:70px;
+      background:linear-gradient(to top,#4a7c40,#6aaa55);
+      border-radius:2px;
+      transform-origin:bottom center;
+    }
+    /* leaf */
+    .flower-leaf {
+      position:absolute; bottom:30px; left:calc(50% + 2px);
+      width:24px; height:14px;
+      background:linear-gradient(135deg,#5a9a48,#7acc60);
+      border-radius:0 50% 50% 0;
+      transform-origin:left center;
+      transform:rotate(-20deg);
+    }
+    /* petals — 6 of them */
+    .flower-center-wrap {
+      position:absolute; top:20px; left:50%; transform:translateX(-50%);
+      width:80px; height:80px;
+    }
+    .petal {
+      position:absolute; top:50%; left:50%;
+      width:22px; height:38px;
+      border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+      transform-origin:50% 100%;
+      background:linear-gradient(to top,var(--rose),#f0a0c0);
+      box-shadow:0 0 10px rgba(232,114,140,0.3);
+      transition:transform 0.6s var(--tr);
+    }
+    /* default closed state — all petals collapsed inward */
+    .petal:nth-child(1){ transform:translate(-50%,-100%) rotate(0deg)   scaleY(0.3); }
+    .petal:nth-child(2){ transform:translate(-50%,-100%) rotate(60deg)  scaleY(0.3); }
+    .petal:nth-child(3){ transform:translate(-50%,-100%) rotate(120deg) scaleY(0.3); }
+    .petal:nth-child(4){ transform:translate(-50%,-100%) rotate(180deg) scaleY(0.3); }
+    .petal:nth-child(5){ transform:translate(-50%,-100%) rotate(240deg) scaleY(0.3); }
+    .petal:nth-child(6){ transform:translate(-50%,-100%) rotate(300deg) scaleY(0.3); }
+    /* bloomed state on hover */
+    .wish-card:nth-child(3):hover .petal:nth-child(1){ transform:translate(-50%,-100%) rotate(0deg)   scaleY(1); }
+    .wish-card:nth-child(3):hover .petal:nth-child(2){ transform:translate(-50%,-100%) rotate(60deg)  scaleY(1); }
+    .wish-card:nth-child(3):hover .petal:nth-child(3){ transform:translate(-50%,-100%) rotate(120deg) scaleY(1); }
+    .wish-card:nth-child(3):hover .petal:nth-child(4){ transform:translate(-50%,-100%) rotate(180deg) scaleY(1); }
+    .wish-card:nth-child(3):hover .petal:nth-child(5){ transform:translate(-50%,-100%) rotate(240deg) scaleY(1); }
+    .wish-card:nth-child(3):hover .petal:nth-child(6){ transform:translate(-50%,-100%) rotate(300deg) scaleY(1); }
+    /* center of flower */
+    .flower-core {
+      position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+      width:22px; height:22px; border-radius:50%;
+      background:radial-gradient(circle,var(--gold-light),var(--gold));
+      box-shadow:0 0 16px rgba(212,165,116,0.7);
+      z-index:2;
+      transition:transform 0.5s var(--tr), box-shadow 0.5s;
+    }
+    .wish-card:nth-child(3):hover .flower-core {
+      transform:translate(-50%,-50%) scale(1.3);
+      box-shadow:0 0 30px rgba(212,165,116,0.9);
+    }
+    /* idle sway animation for flower */
+    @keyframes flowerSway {
+      0%,100%{ transform:translateX(-50%) rotate(0deg); }
+      50%    { transform:translateX(-50%) rotate(4deg); }
+    }
+    .flower-stem { animation:flowerSway 3s ease-in-out infinite; }
+
+    /* background glows per card */
+    .wish-card:nth-child(1) .card-art { background:radial-gradient(ellipse at 50% 80%,rgba(212,165,116,0.12),transparent 70%); }
+    .wish-card:nth-child(2) .card-art { background:radial-gradient(ellipse at 50% 100%, rgba(255,120,0,0.1), transparent 70%); }
+    .wish-card:nth-child(3) .card-art { background:radial-gradient(ellipse at 50% 60%,rgba(232,114,140,0.1),transparent 70%); }
 
     /* ── Footer Quote ── */
     .footer-quote {
@@ -636,43 +942,91 @@
 
   <section class="cards-grid" aria-label="Birthday wishes">
 
+    <!-- CARD 1: Gift Box -->
     <button class="wish-card" data-wish="0" aria-label="Open surprise message">
-      <div class="card-glow"></div>
-      <span class="card-number">01</span>
-      <div class="card-icon-wrap">
-        <div class="card-icon-halo"></div>
-        <img class="card-icon" src="modalimg.jpg" alt="Surprise" />
+      <div class="card-art">
+        <div class="gift-scene">
+          <div class="gift-sparkle"></div>
+          <div class="gift-sparkle"></div>
+          <div class="gift-sparkle"></div>
+          <div class="gift-sparkle"></div>
+          <div class="gift-sparkle"></div>
+          <div class="gift-bow">
+            <div class="bow-left"></div>
+            <div class="bow-right"></div>
+            <div class="bow-knot"></div>
+          </div>
+          <div class="gift-lid"></div>
+          <div class="gift-box-body"></div>
+        </div>
       </div>
-      <p class="card-tag">Just for you</p>
-      <h2 class="card-title">A Small Surprise</h2>
-      <p class="card-desc">A very special message, sealed with love and a little chaos — just the way you like it.</p>
-      <span class="card-btn">Open it <span class="card-btn-arrow">→</span></span>
+      <div class="card-info">
+        <p class="card-tag">Just for you</p>
+        <h2 class="card-title">A Small Surprise</h2>
+        <p class="card-desc">Sealed with love and a little chaos — just the way you like it.</p>
+        <span class="card-btn">Open it <span>→</span></span>
+      </div>
     </button>
 
+    <!-- CARD 2: Blowing Candle -->
     <button class="wish-card" data-wish="1" aria-label="Open cheers card">
-      <div class="card-glow"></div>
-      <span class="card-number">02</span>
-      <div class="card-icon-wrap">
-        <div class="card-icon-halo"></div>
-        <img class="card-icon" src="modalimg2.jpg" alt="Cheers" />
+      <div class="card-art">
+        <div class="candle-scene" id="candleScene">
+          <div class="candle-glow"></div>
+          <span class="candle-hint" id="candleHint">hover &amp; click to blow</span>
+
+          <div class="candle-body">
+            <div class="wax-drip"></div>
+            <div class="wax-drip"></div>
+            <div class="wax-drip"></div>
+            <div class="candle-wick"></div>
+            <div class="flame-outer" id="candleFlame">
+              <div class="flame-main"></div>
+              <div class="flame-inner"></div>
+              <div class="flame-core"></div>
+            </div>
+            <div class="smoke-wrap">
+              <div class="smoke-puff"></div>
+              <div class="smoke-puff"></div>
+              <div class="smoke-puff"></div>
+              <div class="smoke-puff"></div>
+            </div>
+          </div>
+
+          <div class="candle-plate"></div>
+        </div>
       </div>
-      <p class="card-tag">Celebration time</p>
-      <h2 class="card-title">Cheers to You!</h2>
-      <p class="card-desc">To every adventure, every laugh, every wild moment — here's raising a glass to you.</p>
-      <span class="card-btn">Open it <span class="card-btn-arrow">→</span></span>
+      <div class="card-info">
+        <p class="card-tag">Celebration time</p>
+        <h2 class="card-title">Cheers to You!</h2>
+        <p class="card-desc">Every adventure, every laugh, every wild moment — here's to you.</p>
+        <span class="card-btn">Open it <span>→</span></span>
+      </div>
     </button>
 
+    <!-- CARD 3: Blooming Flower -->
     <button class="wish-card" data-wish="2" aria-label="Open sweet wishes card">
-      <div class="card-glow"></div>
-      <span class="card-number">03</span>
-      <div class="card-icon-wrap">
-        <div class="card-icon-halo"></div>
-        <img class="card-icon" src="modalimg3.jpg" alt="Sweet Wishes" />
+      <div class="card-art">
+        <div class="flower-scene">
+          <div class="flower-stem"></div>
+          <div class="flower-leaf"></div>
+          <div class="flower-center-wrap">
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="flower-core"></div>
+          </div>
+        </div>
       </div>
-      <p class="card-tag">From the heart</p>
-      <h2 class="card-title">Sweet Wishes</h2>
-      <p class="card-desc">May every single day ahead bloom as beautifully as the person you already are.</p>
-      <span class="card-btn">Open it <span class="card-btn-arrow">→</span></span>
+      <div class="card-info">
+        <p class="card-tag">☠☠☠</p>
+        <h2 class="card-title">Sweet Wishes</h2>
+        <p class="card-desc">Open it on you own risk 💀.</p>
+        <span class="card-btn">Open it <span>→</span></span>
+      </div>
     </button>
 
   </section>
@@ -733,10 +1087,10 @@ const WISHES = [
     image:'modalimg2.jpg'
   },
   {
-    tag:'From the heart',
+    tag:'',
     title:'🌸 Sweet Wishes',
     imgTitle:'✨',
-    msg:'May your days be as sweet as cake, your dreams as bright as fireworks, and your future overflowing with every beautiful thing you deserve. Happy Birthday — the world\'s a better place with you in it. 🌸',
+    msg:'Bruh Bhoomi made me to add this sticker 💀. BTW Happy Birthday Brooo ✨✨✨',
     image:'modalimg3.jpg'
   }
 ];
@@ -877,7 +1231,7 @@ const pcSystem=(function(){
 
 /* ─── Cycling Word ─── */
 (function(){
-  const words = ['legendary','iconic','chaotic','unstoppable','irreplaceable'];
+  const words = ['legendary','iconic','chaotic','unstoppable','irreplaceable','unpredictable'];
   const box = document.getElementById('wordBox');
   const dotsWrap = document.getElementById('cyclingDots');
   let cur = 0;
@@ -932,15 +1286,10 @@ if (!isTouchDevice()) {
       const r=card.getBoundingClientRect();
       const cx=(e.clientX-r.left)/r.width-0.5;
       const cy=(e.clientY-r.top)/r.height-0.5;
-      card.style.transform=`perspective(800px) rotateY(${cx*12}deg) rotateX(${-cy*10}deg) translateY(-8px)`;
-      const glow=card.querySelector('.card-glow');
-      const px=((e.clientX-r.left)/r.width)*100;
-      const py=((e.clientY-r.top)/r.height)*100;
-      glow.style.setProperty('--mx',px+'%');
-      glow.style.setProperty('--my',py+'%');
+      card.style.transform=`perspective(900px) rotateY(${cx*10}deg) rotateX(${-cy*8}deg) translateY(-8px)`;
     });
     card.addEventListener('mouseleave',()=>{
-      card.style.transform='perspective(800px) rotateY(0deg) rotateX(0deg) translateY(0)';
+      card.style.transform='';
     });
   });
 }
@@ -1006,7 +1355,32 @@ document.getElementById('closeBtn').addEventListener('click',closeModal);
 overlay.addEventListener('click',e=>{ if(e.target===overlay) closeModal(); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
 
-/* ─── Celebrate ─── */
+/* ─── Candle blow & relight ─── */
+(function(){
+  const scene = document.getElementById('candleScene');
+  const hint  = document.getElementById('candleHint');
+  if(!scene) return;
+
+  let blown = false;
+  let relightTimer = null;
+
+  scene.addEventListener('click', function(e){
+    e.stopPropagation(); // don't open modal
+    if(!blown){
+      // blow out
+      blown = true;
+      scene.classList.add('blown');
+      hint.textContent = 'relighting…';
+      // auto relight after 2.2s
+      relightTimer = setTimeout(()=>{
+        blown = false;
+        scene.classList.remove('blown');
+        hint.textContent = 'hover & click to blow';
+      }, 2200);
+    }
+  });
+})();
+
 document.getElementById('celebrateBtn').addEventListener('click',()=>{
   closeModal();
   setTimeout(triggerCelebration,300);
